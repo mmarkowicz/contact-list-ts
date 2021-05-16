@@ -1,4 +1,9 @@
-import { IContact, IContactsState } from "../contacts-state";
+import {
+  fetchContactsThunk,
+  IContact,
+  IContactsState,
+} from "../contacts-state";
+import { ContactsFetchStatus } from "../types";
 
 export const createMockContact = (id: number): IContact => ({
   id: `${id}`,
@@ -13,8 +18,13 @@ export const createInitialState = (
   return {
     selectedIds: [],
     contacts: [],
-    isFetchPending: false,
-    isLastFetchRejected: false,
+    fetchStatus: ContactsFetchStatus.Idle,
     ...partial,
   };
 };
+
+export const prepareFetchContactsActionCreator =
+  (stage: "pending" | "fulfilled" | "rejected") => (payload?: IContact[]) => ({
+    type: fetchContactsThunk[stage].type,
+    payload,
+  });

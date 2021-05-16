@@ -1,12 +1,10 @@
 import React from "react";
-import apiData from "./api";
+import FetchingButton from "./components/fetching-button/fetching-button";
 import PersonInfo from "./PersonInfo";
 
 function App() {
   const [data, setData] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
-
-  //  TODO fetch contacts using apiData function, handle loading and error states
 
   return (
     <div className="App">
@@ -17,6 +15,7 @@ function App() {
           <PersonInfo key={personInfo.id} data={personInfo} />
         ))}
       </div>
+      <FetchingButton />
     </div>
   );
 }

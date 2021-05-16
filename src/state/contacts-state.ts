@@ -5,6 +5,7 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import apiData from "../api";
+import { ContactsFetchStatus } from "./types";
 
 export interface IContact {
   id: string;
@@ -12,7 +13,6 @@ export interface IContact {
   emailAddress: string;
   firstNameLastName: string;
 }
-
 export interface IStateWithContactsSlice {
   contactsState: IContactsState;
 }
@@ -20,18 +20,16 @@ export interface IStateWithContactsSlice {
 export interface IContactsState {
   selectedIds: string[];
   contacts: IContact[];
-  isFetchPending: boolean;
-  isLastFetchRejected: boolean;
+  fetchStatus: ContactsFetchStatus;
 }
 
 const initialState: IContactsState = {
   selectedIds: [],
   contacts: [],
-  isFetchPending: false,
-  isLastFetchRejected: false,
+  fetchStatus: ContactsFetchStatus.Idle,
 };
 
-export const fetchContacts = createAsyncThunk(
+export const fetchContactsThunk = createAsyncThunk(
   "contacts/fetchContacts",
   async () => {
     return apiData();
@@ -60,40 +58,42 @@ const slice = createSlice({
     },
   },
   extraReducers: {
-    [fetchContacts.pending.type]: (state: IContactsState) => {
-      state.isFetchPending = true;
-      state.isLastFetchRejected = false;
+    [fetchContactsThunk.pending.type]: (state: IContactsState) => {
+      state.fetchStatus = ContactsFetchStatus.Pending;
     },
-    [fetchContacts.fulfilled.type]: (
+    [fetchContactsThunk.fulfilled.type]: (
       state: IContactsState,
       { payload: newContacts }: PayloadAction<IContact[]>
     ) => {
       state.contacts = state.contacts.concat(newContacts);
-      state.isFetchPending = false;
+      state.fetchStatus = ContactsFetchStatus.Idle;
     },
-    [fetchContacts.rejected.type]: (state: IContactsState) => {
-      state.isFetchPending = false;
-      state.isLastFetchRejected = true;
+    [fetchContactsThunk.rejected.type]: (state: IContactsState) => {
+      state.fetchStatus = ContactsFetchStatus.Rejected;
     },
   },
 });
 
 export const { contactSelected, contactDeselected } = slice.actions;
 
-export default slice.reducer;
+export const contactsReducer = slice.reducer;
+
+export const selectContacts = ({
+  contactsState,
+}: IStateWithContactsSlice): IContact[] => contactsState.contacts;
+
+export const selectSelectedIds = ({
+  contactsState,
+}: IStateWithContactsSlice): string[] => contactsState.selectedIds;
+
+export const selectFetchStatus = ({
+  contactsState,
+}: IStateWithContactsSlice): ContactsFetchStatus => contactsState.fetchStatus;
 
 interface IContactsSelection {
   selectedContacts: IContact[];
   unselectedContacts: IContact[];
 }
-
-export const contactsStateGetter = ({
-  contactsState,
-}: IStateWithContactsSlice): IContact[] => contactsState.contacts;
-
-export const selectedIdsStateGetter = ({
-  contactsState,
-}: IStateWithContactsSlice): string[] => contactsState.selectedIds;
 
 export const contactsSelectorCombiner = (
   contacts: IContact[],
@@ -113,7 +113,7 @@ export const contactsSelectorCombiner = (
 };
 
 export const contactsSelector = createSelector(
-  contactsStateGetter,
-  selectedIdsStateGetter,
+  selectContacts,
+  selectSelectedIds,
   contactsSelectorCombiner
 );

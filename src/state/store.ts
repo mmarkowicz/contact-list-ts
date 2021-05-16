@@ -1,6 +1,12 @@
-import contactsReducer from "./contacts-state";
-import { combineReducers } from "redux";
+import { contactsReducer, IStateWithContactsSlice } from "./contacts-state";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
-combineReducers({
-  contacts: contactsReducer,
+interface IState extends IStateWithContactsSlice {}
+
+const rootReducer = combineReducers({
+  contactsState: contactsReducer,
+});
+
+export const store = configureStore<IState>({
+  reducer: rootReducer,
 });

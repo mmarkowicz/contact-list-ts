@@ -1,5 +1,5 @@
-describe("Contacts state thunks", () => {
-  describe("when using fetchContactsThunk", () => {
-    it("", () => {});
-  });
-});
+// describe("Contacts state thunks", () => {
+//   describe("when using fetchContactsThunk", () => {
+//     it("", () => {});
+//   });
+// });
