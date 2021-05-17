@@ -8,7 +8,7 @@ type WrapperConfig = {
 };
 
 export const Wrapper = styled.div<WrapperConfig>`
-  height: 100px;
+  height: 120px;
   width: 100%;
   display: flex;
   align-items: center;

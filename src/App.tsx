@@ -15,7 +15,7 @@ const SelectedSection = styled.div`
   color: #333333;
   font-size: 26px;
   font-weight: 700;
-  margin: 10px 20px 0 0;
+  margin: 10px 0 20px;
 `;
 
 const ListSection = styled.div`

@@ -11,7 +11,7 @@ import ContactInformation from "../contact-information/contact-information";
 import FetchContacts from "../fetching-button/fetch-contacts";
 import styled from "styled-components";
 
-const ITEM_HEIGHT = 110;
+const ITEM_HEIGHT = 130;
 
 const ItemWrapper = styled.div`
   height: {ITEM_HEIGHT}px;
