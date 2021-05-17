@@ -1,7 +1,7 @@
 import mockData from "./mockData.json";
 
 let cursor = -1;
-const size = 10;
+const size = 50;
 
 function delay(time: number) {
   return new Promise((resolve) => setTimeout(() => resolve(), time));
