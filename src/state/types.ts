@@ -4,7 +4,7 @@ export interface IState {
   contactsState: IContactsState;
 }
 
-export enum ContactsFetchStatus {
+export enum FetchStatus {
   Idle = "Idle",
   Pending = "Pending",
   Rejected = "Rejected",

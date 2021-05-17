@@ -1,35 +1,37 @@
-import contactsReducer, {
+import {
+  contactsReducer,
   contactSelected,
   contactDeselected,
   IContact,
   IContactsState,
-  fetchContacts,
+  fetchContactsThunk,
 } from "../contacts-state";
-import { createInitialState, createMockContact } from "./test-utils";
-
-const prepareFetchContactsActionCreator =
-  (stage: "pending" | "fulfilled" | "rejected") => (payload?: IContact[]) => ({
-    type: fetchContacts[stage].type,
-    payload,
-  });
+import { FetchStatus } from "../types";
+import {
+  createInitialState,
+  createMockContact,
+  prepareFetchContactsActionCreator,
+} from "./test-utils";
 
 describe("Contacts state reducer", () => {
   it("should return the initial state", () => {
-    expect(contactsReducer(undefined, { type: undefined })).toEqual(
-      createInitialState()
-    );
+    const resultState = contactsReducer(undefined, { type: undefined });
+    expect(resultState).toEqual(createInitialState());
   });
 
-  describe(`when dispatching ${fetchContacts.fulfilled}`, () => {
+  describe(`when dispatching ${fetchContactsThunk.fulfilled}`, () => {
     const fulfilledFetchContacts =
       prepareFetchContactsActionCreator("fulfilled");
 
     it("should add new contacts", () => {
       const mockFetchedContacts: IContact[] = [createMockContact(1)];
 
-      expect(
-        contactsReducer(undefined, fulfilledFetchContacts(mockFetchedContacts))
-      ).toEqual(
+      const resultState = contactsReducer(
+        undefined,
+        fulfilledFetchContacts(mockFetchedContacts)
+      );
+
+      expect(resultState).toEqual(
         createInitialState({
           contacts: [createMockContact(1)],
         })
@@ -41,23 +43,31 @@ describe("Contacts state reducer", () => {
         contacts: [createMockContact(0), createMockContact(1)],
       });
 
-      expect(
-        contactsReducer(testCaseState, fulfilledFetchContacts([]))
-      ).toEqual(
+      const resultState = contactsReducer(
+        testCaseState,
+        fulfilledFetchContacts([])
+      );
+
+      expect(resultState).toEqual(
         createInitialState({
           contacts: [createMockContact(0), createMockContact(1)],
         })
       );
     });
 
-    it("should mark fetching as fulfilled", () => {
+    it("should mark fetching status as idle", () => {
       const testCaseState: IContactsState = createInitialState({
-        isFetchPending: true,
+        fetchStatus: FetchStatus.Pending,
       });
 
-      expect(
-        contactsReducer(testCaseState, fulfilledFetchContacts([]))
-      ).toEqual(createInitialState({ isFetchPending: false }));
+      const resultState = contactsReducer(
+        testCaseState,
+        fulfilledFetchContacts([])
+      );
+
+      expect(resultState).toEqual(
+        createInitialState({ fetchStatus: FetchStatus.Idle })
+      );
     });
 
     it("should add new contacts at the end of the contacts list", () => {
@@ -67,12 +77,11 @@ describe("Contacts state reducer", () => {
 
       const mockFetchedContacts: IContact[] = [createMockContact(1)];
 
-      expect(
-        contactsReducer(
-          testCaseState,
-          fulfilledFetchContacts(mockFetchedContacts)
-        )
-      ).toEqual(
+      const resultState = contactsReducer(
+        testCaseState,
+        fulfilledFetchContacts(mockFetchedContacts)
+      );
+      expect(resultState).toEqual(
         createInitialState({
           contacts: [createMockContact(0), createMockContact(1)],
         })
@@ -80,37 +89,43 @@ describe("Contacts state reducer", () => {
     });
   });
 
-  describe(`when dispatching ${fetchContacts.rejected}`, () => {
+  describe(`when dispatching ${fetchContactsThunk.rejected}`, () => {
     const rejectedFetchContacts = prepareFetchContactsActionCreator("rejected");
 
-    it("should mark fetching as finished and indicate rejection", () => {
+    it("should mark fetching status as rejected", () => {
       const testCaseState: IContactsState = createInitialState({
-        isFetchPending: true,
-        isLastFetchRejected: false,
+        fetchStatus: FetchStatus.Pending,
       });
 
-      expect(contactsReducer(testCaseState, rejectedFetchContacts())).toEqual(
+      const resultState = contactsReducer(
+        testCaseState,
+        rejectedFetchContacts()
+      );
+
+      expect(resultState).toEqual(
         createInitialState({
-          isFetchPending: false,
-          isLastFetchRejected: true,
+          fetchStatus: FetchStatus.Rejected,
         })
       );
     });
   });
 
-  describe(`when dispatching ${fetchContacts.pending}`, () => {
+  describe(`when dispatching ${fetchContactsThunk.pending}`, () => {
     const pendingFetchContacts = prepareFetchContactsActionCreator("pending");
 
     it("should mark fetching as pending and clear rejection indication", () => {
       const testCaseState: IContactsState = createInitialState({
-        isFetchPending: false,
-        isLastFetchRejected: true,
+        fetchStatus: FetchStatus.Idle,
       });
 
-      expect(contactsReducer(testCaseState, pendingFetchContacts())).toEqual(
+      const resultState = contactsReducer(
+        testCaseState,
+        pendingFetchContacts()
+      );
+
+      expect(resultState).toEqual(
         createInitialState({
-          isFetchPending: true,
-          isLastFetchRejected: false,
+          fetchStatus: FetchStatus.Pending,
         })
       );
     });
@@ -120,9 +135,12 @@ describe("Contacts state reducer", () => {
     it("should add selected id to selected ids array", () => {
       const testCaseState: IContactsState = createInitialState();
 
-      expect(
-        contactsReducer(testCaseState, contactSelected("test-id-1"))
-      ).toEqual(
+      const resultState = contactsReducer(
+        testCaseState,
+        contactSelected("test-id-1")
+      );
+
+      expect(resultState).toEqual(
         createInitialState({
           selectedIds: ["test-id-1"],
         })
@@ -134,9 +152,12 @@ describe("Contacts state reducer", () => {
         selectedIds: ["test-id-1"],
       });
 
-      expect(
-        contactsReducer(testCaseState, contactSelected("test-id-1"))
-      ).toEqual(
+      const resultState = contactsReducer(
+        testCaseState,
+        contactSelected("test-id-1")
+      );
+
+      expect(resultState).toEqual(
         createInitialState({
           selectedIds: ["test-id-1"],
         })
@@ -150,9 +171,12 @@ describe("Contacts state reducer", () => {
         selectedIds: ["test-id-0", "test-id-1"],
       });
 
-      expect(
-        contactsReducer(testCaseState, contactDeselected("test-id-1"))
-      ).toEqual(
+      const resultState = contactsReducer(
+        testCaseState,
+        contactDeselected("test-id-1")
+      );
+
+      expect(resultState).toEqual(
         createInitialState({
           selectedIds: ["test-id-0"],
         })
@@ -164,9 +188,12 @@ describe("Contacts state reducer", () => {
         selectedIds: ["test-id-1"],
       });
 
-      expect(
-        contactsReducer(testCaseState, contactDeselected("test-id-2"))
-      ).toEqual(
+      const resultState = contactsReducer(
+        testCaseState,
+        contactDeselected("test-id-2")
+      );
+
+      expect(resultState).toEqual(
         createInitialState({
           selectedIds: ["test-id-1"],
         })

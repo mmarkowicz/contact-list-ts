@@ -1,21 +1,29 @@
 import React from "react";
-import FetchingButton from "./components/fetching-button/fetching-button";
+import FetchContacts from "./components/fetching-button/fetch-contacts";
 import PersonInfo from "./PersonInfo";
+import { useSelector } from "react-redux";
+import { contactsSelector } from "./state/contacts-state";
 
 function App() {
-  const [data, setData] = React.useState([]);
-  const [selected, setSelected] = React.useState([]);
+  const { selectedContacts, unselectedContacts } =
+    useSelector(contactsSelector);
 
   return (
     <div className="App">
-      <div className="selected">Selected contacts: {selected.length}</div>
+      <div className="selected">
+        Selected contacts: {selectedContacts.length}
+      </div>
       <div className="list">
-        {data.map((personInfo) => (
+        {selectedContacts.map((personInfo) => (
+          // @ts-ignore
+          <PersonInfo key={personInfo.id} data={personInfo} />
+        ))}
+        {unselectedContacts.map((personInfo) => (
           // @ts-ignore
           <PersonInfo key={personInfo.id} data={personInfo} />
         ))}
       </div>
-      <FetchingButton />
+      <FetchContacts />
     </div>
   );
 }

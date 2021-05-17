@@ -5,7 +5,7 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import apiData from "../api";
-import { ContactsFetchStatus } from "./types";
+import { FetchStatus } from "./types";
 
 export interface IContact {
   id: string;
@@ -20,13 +20,13 @@ export interface IStateWithContactsSlice {
 export interface IContactsState {
   selectedIds: string[];
   contacts: IContact[];
-  fetchStatus: ContactsFetchStatus;
+  fetchStatus: FetchStatus;
 }
 
 const initialState: IContactsState = {
   selectedIds: [],
   contacts: [],
-  fetchStatus: ContactsFetchStatus.Idle,
+  fetchStatus: FetchStatus.Idle,
 };
 
 export const fetchContactsThunk = createAsyncThunk(
@@ -59,17 +59,17 @@ const slice = createSlice({
   },
   extraReducers: {
     [fetchContactsThunk.pending.type]: (state: IContactsState) => {
-      state.fetchStatus = ContactsFetchStatus.Pending;
+      state.fetchStatus = FetchStatus.Pending;
     },
     [fetchContactsThunk.fulfilled.type]: (
       state: IContactsState,
       { payload: newContacts }: PayloadAction<IContact[]>
     ) => {
       state.contacts = state.contacts.concat(newContacts);
-      state.fetchStatus = ContactsFetchStatus.Idle;
+      state.fetchStatus = FetchStatus.Idle;
     },
     [fetchContactsThunk.rejected.type]: (state: IContactsState) => {
-      state.fetchStatus = ContactsFetchStatus.Rejected;
+      state.fetchStatus = FetchStatus.Rejected;
     },
   },
 });
@@ -88,7 +88,7 @@ export const selectSelectedIds = ({
 
 export const selectFetchStatus = ({
   contactsState,
-}: IStateWithContactsSlice): ContactsFetchStatus => contactsState.fetchStatus;
+}: IStateWithContactsSlice): FetchStatus => contactsState.fetchStatus;
 
 interface IContactsSelection {
   selectedContacts: IContact[];

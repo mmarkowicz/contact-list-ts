@@ -3,7 +3,7 @@ import {
   IContact,
   IContactsState,
 } from "../contacts-state";
-import { ContactsFetchStatus } from "../types";
+import { FetchStatus } from "../types";
 
 export const createMockContact = (id: number): IContact => ({
   id: `${id}`,
@@ -18,7 +18,7 @@ export const createInitialState = (
   return {
     selectedIds: [],
     contacts: [],
-    fetchStatus: ContactsFetchStatus.Idle,
+    fetchStatus: FetchStatus.Idle,
     ...partial,
   };
 };
