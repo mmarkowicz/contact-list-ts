@@ -5,7 +5,12 @@ import {
   contactSelected,
   contactsSelector,
 } from "src/state/contacts-state";
+import styled from "styled-components";
 import ContactInformation from "../contact-information/contact-information";
+
+const List = styled.div`
+  width: 100%;
+`;
 
 const ContactsList = () => {
   const dispatch = useDispatch();
@@ -23,7 +28,7 @@ const ContactsList = () => {
   );
 
   return (
-    <div>
+    <List>
       {selectedContacts.map((contact) => (
         <ContactInformation
           key={contact.id}
@@ -39,7 +44,7 @@ const ContactsList = () => {
           onClick={select}
         />
       ))}
-    </div>
+    </List>
   );
 };
 

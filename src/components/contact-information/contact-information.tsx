@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { IContact } from "src/state/types";
+import { Name, JobTitle, EmailAddress } from "./card-items";
 
 type WrapperConfig = {
   isSelected: boolean;
@@ -37,9 +38,9 @@ function ContactInformation({
   const handleClick = () => onClick(id);
   return (
     <Wrapper isSelected={isSelected} onClick={handleClick}>
-      <div className="firstNameLastName">{firstNameLastName}</div>
-      <div className="jobTitle">{jobTitle}</div>
-      <div className="emailAddress">{emailAddress}</div>
+      <Name>{firstNameLastName}</Name>
+      <JobTitle>{jobTitle}</JobTitle>
+      <EmailAddress>{emailAddress}</EmailAddress>
     </Wrapper>
   );
 }
