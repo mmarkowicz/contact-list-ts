@@ -1,9 +1,5 @@
-import {
-  fetchContactsThunk,
-  IContact,
-  IContactsState,
-} from "../contacts-state";
-import { FetchStatus } from "../types";
+import { fetchContactsThunk, IContactsState } from "../contacts-state";
+import { FetchStatus, IContact } from "../types";
 
 export const createMockContact = (id: number): IContact => ({
   id: `${id}`,

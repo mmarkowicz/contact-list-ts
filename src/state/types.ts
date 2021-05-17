@@ -9,3 +9,9 @@ export enum FetchStatus {
   Pending = "Pending",
   Rejected = "Rejected",
 }
+export interface IContact {
+  id: string;
+  jobTitle: string;
+  emailAddress: string;
+  firstNameLastName: string;
+}

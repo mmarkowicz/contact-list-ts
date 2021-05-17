@@ -5,14 +5,8 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import apiData from "../api";
-import { FetchStatus } from "./types";
+import { FetchStatus, IContact } from "./types";
 
-export interface IContact {
-  id: string;
-  jobTitle: string;
-  emailAddress: string;
-  firstNameLastName: string;
-}
 export interface IStateWithContactsSlice {
   contactsState: IContactsState;
 }
@@ -100,8 +94,12 @@ export const contactsSelectorCombiner = (
   selectedIds: string[]
 ): IContactsSelection => {
   const selectedIdsSet = new Set(selectedIds);
+  const contactsMap = new Map(contacts.map((contact) => [contact.id, contact]));
 
-  const selectedContacts = contacts.filter(({ id }) => selectedIdsSet.has(id));
+  const selectedContacts = selectedIds
+    .map((id) => contactsMap.get(id))
+    .filter((contact) => !!contact) as IContact[];
+
   const unselectedContacts = contacts.filter(
     ({ id }) => !selectedIdsSet.has(id)
   );

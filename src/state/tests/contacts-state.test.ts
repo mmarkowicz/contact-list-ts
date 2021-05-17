@@ -2,11 +2,10 @@ import {
   contactsReducer,
   contactSelected,
   contactDeselected,
-  IContact,
   IContactsState,
   fetchContactsThunk,
 } from "../contacts-state";
-import { FetchStatus } from "../types";
+import { FetchStatus, IContact } from "../types";
 import {
   createInitialState,
   createMockContact,

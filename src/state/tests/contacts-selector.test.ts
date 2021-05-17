@@ -1,4 +1,5 @@
-import { contactsSelectorCombiner, IContact } from "../contacts-state";
+import { contactsSelectorCombiner } from "../contacts-state";
+import { IContact } from "../types";
 import { createMockContact } from "./test-utils";
 
 describe("Contacts Selector", () => {
@@ -59,6 +60,20 @@ describe("Contacts Selector", () => {
       ]);
 
       expect(selectedContacts).toEqual([]);
+    });
+
+    it("should remain selection order for selected items", () => {
+      const { selectedContacts } = contactsSelectorCombiner(contactsList, [
+        "3",
+        "1",
+        "2",
+      ]);
+
+      expect(selectedContacts).toEqual([
+        createMockContact(3),
+        createMockContact(1),
+        createMockContact(2),
+      ]);
     });
   });
 });
