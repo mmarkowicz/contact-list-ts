@@ -1,6 +1,14 @@
-import { IContactsState } from "./contacts-state";
+export interface IContactsState {
+  selectedIds: string[];
+  contacts: IContact[];
+  fetchStatus: FetchStatus;
+}
 
 export interface IState {
+  contactsState: IContactsState;
+}
+
+export interface IStateWithContactsSlice {
   contactsState: IContactsState;
 }
 

@@ -9,6 +9,7 @@ const AppWrapper = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-direction: column;
   padding: 0 20px;
 `;
@@ -20,6 +21,16 @@ const SelectedSection = styled.div`
   margin: 10px 0 20px;
 `;
 
+const ContactsSection = styled.div`
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+  overflow-y: auto;
+`;
+
 function App() {
   const { selectedContacts } = useSelector(contactsSelector);
 
@@ -28,8 +39,10 @@ function App() {
       <SelectedSection>
         Selected contacts: {selectedContacts.length}
       </SelectedSection>
-      <ContactsList />
-      <FetchContacts />
+      <ContactsSection>
+        <ContactsList />
+        <FetchContacts />
+      </ContactsSection>
     </AppWrapper>
   );
 }

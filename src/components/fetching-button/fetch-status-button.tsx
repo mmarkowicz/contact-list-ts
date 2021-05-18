@@ -30,12 +30,13 @@ export const Button = styled(({ color, ...rest }) => <button {...rest} />)<{
   color: string;
   disabled?: boolean;
 }>`
+  flex-shrink: 0;
+  padding: 8px;
   cursor: ${({ disabled }) => (disabled ? "wait" : "pointer")};
   border: 3px solid ${({ color }) => color};
   border-radius: 4px;
   background-color: white;
   color: ${({ color }) => color};
-  padding: 8px;
   font: inherit;
   outline: none;
 `;

@@ -9,13 +9,13 @@ type WrapperConfig = {
 
 export const Wrapper = styled.div<WrapperConfig>`
   display: flex;
-  height: 100px;
   justify-content: center;
+  align-items: center;
   flex-direction: column;
-  padding: 32px;
+  padding: 10px;
+  margin: 10px 0;
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.15);
   border: 2px solid ${({ isSelected }) => (isSelected ? "blue" : "white")};
-  margin: 10px 0;
   background: #fff;
   cursor: pointer;
 

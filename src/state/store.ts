@@ -1,5 +1,6 @@
-import { contactsReducer, IStateWithContactsSlice } from "./contacts-state";
+import { contactsReducer } from "./contacts-state";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { IStateWithContactsSlice } from "./types";
 
 interface IState extends IStateWithContactsSlice {}
 
