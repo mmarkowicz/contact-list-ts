@@ -5,17 +5,12 @@ import {
   PayloadAction,
 } from "@reduxjs/toolkit";
 import apiData from "../api";
-import { FetchStatus, IContact } from "./types";
-
-export interface IStateWithContactsSlice {
-  contactsState: IContactsState;
-}
-
-export interface IContactsState {
-  selectedIds: string[];
-  contacts: IContact[];
-  fetchStatus: FetchStatus;
-}
+import {
+  FetchStatus,
+  IContact,
+  IContactsState,
+  IStateWithContactsSlice,
+} from "./types";
 
 const initialState: IContactsState = {
   selectedIds: [],
